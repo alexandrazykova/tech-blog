@@ -17,6 +17,9 @@ Post.init({
     text: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+            len: [10],
+        },
     },
     user_id: {
         type: DataTypes.INTEGER,
@@ -26,12 +29,12 @@ Post.init({
         },
     },
 },
-{
-    sequelize,
-    freezeTableName: true,
-    underscored: true,
-    modelName: "post",
-}
+    {
+        sequelize,
+        freezeTableName: true,
+        underscored: true,
+        modelName: "post",
+    }
 );
 
 module.exports = Post;
