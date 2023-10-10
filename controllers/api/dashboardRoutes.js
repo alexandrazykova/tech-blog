@@ -2,6 +2,40 @@ const router = require('express').Router();
 const { User, Post, Comment } = require('../../models');
 const withAuth = require('../utils/auth')
 
+router.get('/', (req, res) => {
+    Post.findAll({
+            where: {
+                user_id: req.session.user_id
+            },
+            attributes: [
+                'id',
+                'title',
+                'text',
+            ],
+            include: [{
+                    model: Comment,
+                    attributes: ['id', 'text', 'user_id'],
+                    include: {
+                        model: User,
+                        attributes: ['username']
+                    }
+                },
+                {
+                    model: User,
+                    attributes: ['username']
+                }
+            ]
+        })
+        .then(postData => {
+            const posts = postData.map(post => post.get({ plain: true }));
+            res.render('dashboard', { posts, loggedIn: true });
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json(err);
+        });
+});
+
 router.post('/', async (req, res) => {
   try {
     const newPost = await Post.create({
@@ -37,14 +71,14 @@ router.get('/:id', async (req, res) => {
       res.status(404).json({ message: 'Nothing found with that id!' });
       return;
     }
-    res.status(200).json(prostData);
+    res.status(200).json(postData);
   } catch (err) {
     res.status(500).json(err);
     console.log(err)
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', withAuth, async (req, res) => {
   try {
     const postData = await Post.destroy({
       where: {
