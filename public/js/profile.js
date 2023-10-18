@@ -5,7 +5,7 @@ const newFormHandler = async (event) => {
     const text = document.querySelector('#post-text').value.trim();
   
     if (name && text) {
-      const response = await fetch(`/api/dashboard`, {
+      const response = await fetch(`/api/posts`, {
         method: 'POST',
         body: JSON.stringify({ name, text }),
         headers: {
@@ -14,7 +14,7 @@ const newFormHandler = async (event) => {
       });
   
       if (response.ok) {
-        document.location.replace('/dashboard');
+        document.location.replace('/profile');
       } else {
         alert('Failed to load dashboard page');
       }
@@ -25,12 +25,12 @@ const newFormHandler = async (event) => {
     if (event.target.hasAttribute('data-id')) {
       const id = event.target.getAttribute('data-id');
   
-      const response = await fetch(`/api/dashboard/${id}`, {
+      const response = await fetch(`/api/posts/${id}`, {
         method: 'DELETE',
       });
   
       if (response.ok) {
-        document.location.replace('/dashboard');
+        document.location.replace('/profile');
       } else {
         alert('Failed to delete posts from your dashboard');
       }

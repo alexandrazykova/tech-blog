@@ -28,7 +28,7 @@ router.get('/', (req, res) => {
         })
         .then(postData => {
             const posts = postData.map(post => post.get({ plain: true }));
-            res.render('dashboard', { posts, loggedIn: true });
+            res.render('posts', { posts, loggedIn: true });
         })
         .catch(err => {
             console.log(err);

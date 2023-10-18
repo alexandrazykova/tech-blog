@@ -25,7 +25,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.get('/post/:id', async (req, res) => {
+router.get('/posts/:id', async (req, res) => {
     console.log(req.params.id)
     try {
         const postData = await Post.findByPk(req.params.id, {
@@ -46,7 +46,7 @@ router.get('/post/:id', async (req, res) => {
         })
 
         const post = postData.get({ plain: true });
-        res.render('post', {
+        res.render('posts', {
             ...post,
             loggedIn: req.session.loggedIn
         });
@@ -58,7 +58,7 @@ router.get('/post/:id', async (req, res) => {
 
 router.get('/login', (req, res) => {
     if (req.session.loggedIn) {
-        res.redirect('/dashboard');
+        res.redirect('/posts');
         return;
     }
 
